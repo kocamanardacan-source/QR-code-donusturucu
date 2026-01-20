@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>QR Code Studio</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="light">
+
+  <div class="card">
+    <div class="top">
+      <h1>QR Code Studio</h1>
+      <button class="themeBtn" onclick="temaDegistir()">🌙</button>
+    </div>
+
+    <p>Metin veya link gir, QR kodunu oluştur</p>
+
+    <input type="text" id="qrText" placeholder="google.com veya Merhaba">
+
+    <label class="label">QR Rengi</label>
+    <input type="color" id="qrColor" value="#000000">
+
+    <div class="buttons">
+      <button onclick="qrUret()">QR Oluştur</button>
+      <button onclick="qrIndir()" id="indirBtn" disabled>QR İndir</button>
+    </div>
+
+    <div id="bilgi"></div>
+    <div id="qrBox"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
