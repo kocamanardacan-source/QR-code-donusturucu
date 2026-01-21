@@ -1,62 +1,37 @@
-let qr;
-
-function qrUret() {
-  let text = document.getElementById("qrText").value.trim();
-  const color = document.getElementById("qrColor").value;
+function generateQR() {
+  const input = document.getElementById("qrInput").value.trim();
   const qrBox = document.getElementById("qrBox");
-  const bilgi = document.getElementById("bilgi");
-  const indirBtn = document.getElementById("indirBtn");
+  const downloadBtn = document.getElementById("downloadBtn");
 
   qrBox.innerHTML = "";
-  bilgi.innerHTML = "";
-  indirBtn.disabled = true;
+  downloadBtn.style.display = "none";
 
-  if (text === "") {
-    alert("Lütfen metin veya link gir");
+  if (!input) {
+    alert("Lütfen bir metin veya link gir");
     return;
   }
 
   // 🔍 OTOMATİK URL ALGILAMA
-  let urlAlgilandi = false;
+  let data = input;
   if (
-    !text.startsWith("http://") &&
-    !text.startsWith("https://") &&
-    (text.includes(".com") ||
-     text.includes(".net") ||
-     text.includes(".org") ||
-     text.includes(".tr"))
+    input.startsWith("www.") ||
+    (!input.startsWith("http") && input.includes("."))
   ) {
-    text = "https://" + text;
-    urlAlgilandi = true;
+    data = "https://" + input.replace(/^https?:\/\//, "");
   }
 
-  qr = new QRCode(qrBox, {
-    text: text,
-    width: 200,
-    height: 200,
-    colorDark: color,
-    colorLight: "#ffffff"
-  });
+  QRCode.toDataURL(
+    data,
+    { width: 220, margin: 2 },
+    function (err, url) {
+      if (err) return console.error(err);
 
-  if (urlAlgilandi) {
-    bilgi.innerText = "✔ URL algılandı ve düzenlendi";
-  }
+      const img = document.createElement("img");
+      img.src = url;
+      qrBox.appendChild(img);
 
-  indirBtn.disabled = false;
-}
-
-function qrIndir() {
-  const img = document.querySelector("#qrBox img");
-  if (!img) return;
-
-  const link = document.createElement("a");
-  link.href = img.src;
-  link.download = "qr-code.png";
-  link.click();
-}
-
-function temaDegistir() {
-  const body = document.body;
-  body.classList.toggle("dark");
-  body.classList.toggle("light");
+      downloadBtn.href = url;
+      downloadBtn.style.display = "inline-block";
+    }
+  );
 }
